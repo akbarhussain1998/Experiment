@@ -1,0 +1,32 @@
+name: Create torrent
+
+on:
+  push:
+    branches:
+      - master
+      
+env:
+  name: "Blackpink-How you Like That"
+  comment: "Blackpink-How you Like That"
+  url: http://62.138.16.190/c.php?s=eNoBSAC3%252F3XiSrLCJbIKlmPsREoYhVbCJS4TRqnX3Z55BYNRLAfHwcAEGsQ488nUz0H9Ozcreqf4gNmsKHTtQodm%252FWH1i0ZPQ9tGlRKtZei6I00%253D
+  file_name: "Blackpink-How you Like That.mp4"
+  piece_size: 19 # Check the README.md for recommended piece size
+      
+jobs:
+  create:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install mktorrent
+        run: sudo apt-get install mktorrent
+        
+      - name: Download file
+        run: wget -nv -O "$file_name" "$url"
+        
+      - name: Create torrent using mktorrent
+        run: mktorrent -c "$comment" -l $piece_size -o "${name}.torrent" -w "$url" "$file_name"
+        
+      - name: Upload torrent file
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.name }}
+          path: ${{ env.name }}.torrentname }}.torrent
